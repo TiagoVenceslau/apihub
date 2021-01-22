@@ -3,18 +3,28 @@ const http = require('http');
 const https = require('https');
 
 
-function Server(sslOptions) {
-    const middleware = new MiddlewareRegistry();
+function Server(sslOptions, logging = {"enabled": false}) {
+    const middleware = new MiddlewareRegistry(logging);
     const server = _initServer(sslOptions);
 
 
     this.use = function use(url, callback) {
+        let cb = callback;
+        if (logging.enabled){
+            cb = (req, res, options) => {
+                if (req.starting_time){
+                    let elapsed = Date.now() - req.starting_time;
+                    console.log(`- Request handled in ${elapsed} milliseconds`)
+                }
+                callback(req, res, options);
+            }
+        }
         //TODO: find a better way
         if (arguments.length >= 2) {
-            middleware.use(url, callback);
+            middleware.use(url, cb);
         } else if (arguments.length === 1) {
             callback = url;
-            middleware.use(callback);
+            middleware.use(cb);
         }
 
     };

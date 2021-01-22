@@ -54,7 +54,7 @@ function methodMatch(pattern, method) {
     return pattern === method;
 }
 
-function MiddlewareRegistry() {
+function MiddlewareRegistry(logging = {"enabled": false}) {
     const registeredMiddlewareFunctions = [];
 
     function use(method, url, fn) {
@@ -110,6 +110,8 @@ function MiddlewareRegistry() {
      * @param {Object} res
      */
     this.go = function go(req, res) {
+        if (logging.enabled)
+            req.starting_time = Date.now();
         execute(0, req.method.toLowerCase(), req.url, req, res);
     };
 

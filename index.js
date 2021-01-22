@@ -31,7 +31,7 @@ function HttpServer({ listeningPort, rootFolder, sslConfig }, callback) {
 	const tokenBucket = new TokenBucket(START_TOKENS, 1, 10);
 
 	const conf =  require('./config').getConfig();
-	const server = new Server(sslConfig);
+	const server = new Server(sslConfig, conf.logging);
 	server.rootFolder = rootFolder;
 
 	checkPortInUse(port, sslConfig, (err, status) => {
