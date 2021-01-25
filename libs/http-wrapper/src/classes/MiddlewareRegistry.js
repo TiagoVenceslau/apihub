@@ -130,6 +130,8 @@ function MiddlewareRegistry(logging = {"enabled": false}) {
             return;
         }
 
+        console.log(index + "/" + registeredMiddlewareFunctions.length);
+
 	    const registeredMethod = registeredMiddlewareFunctions[index].method;
 	    const registeredUrl = registeredMiddlewareFunctions[index].url;
 	    const fn = registeredMiddlewareFunctions[index].fn;
